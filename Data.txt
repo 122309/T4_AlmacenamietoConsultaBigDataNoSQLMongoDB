@@ -1,0 +1,117 @@
+Ruta: https://www.kaggle.com/datasets/siwachtoprasert/mongodb-supplies/data
+Calcular agrupar por ubicación
+{
+  "_id": "$storeLocation",
+  "totalVentasPorUbicacion": {
+    "$sum": "$saleTotalCalculado"
+  }
+}
+----------------Consultas básicas------------------
+Insertar datos
+*****************************************
+{
+  "_id": {
+    "$oid": "6910974172eab9a07ca9dfae"
+  },
+  "saleDate": {
+    "$date": "2025-03-23T21:11:49.506Z"
+  },
+  "items": [
+    {
+      "name": "lipstick",
+      "tags": [
+        "beauty products",
+        "glamour"
+      ],
+      "price": {
+        "$numberDecimal": "15.01"
+      },
+      "quantity": 6
+    },
+    {
+      "name": "face powder",
+      "tags": [
+        "beauty products",
+        "glamour"
+      ],
+      "price": {
+        "$numberDecimal": "25.29"
+      },
+      "quantity": 5
+    },
+    {
+      "name": "mascara",
+      "tags": [
+        "beauty products",
+        "glamour"
+      ],
+      "price": {
+        "$numberDecimal": "26.12"
+      },
+      "quantity": 8
+    },
+    {
+      "name": "liquid makeup remover",
+      "tags": [
+       "beauty products",
+        "glamour"
+      ],
+      "price": {
+        "$numberDecimal": "27.71"
+      },
+      "quantity": 2
+    }
+  ],
+  "storeLocation": "Denver",
+  "customer": {
+    "gender": "M",
+    "age":342,
+    "email": "lina@witwuta.sv",
+    "satisfaction": 4
+  },
+  "couponUsed": true,
+  "purchaseMethod": "Online"
+}
+
+
+encontrarlo
+db.ventas_productos.findOne({"_id": ObjectId("6910974172eab9a07ca9dfae")})
+*****************************************
+
+
+Selección de datos
+*****************************************
+Uso de comando (cambiar id para encontrar otro
+{ "_id": ObjectId("6910974172eab9a07ca9dfae") }
+Selección de artículos con cupon de descuento
+{ "couponUsed": false }
+
+*****************************************
+
+Actualización de datos
+****************************************
+{
+  $set: {
+"items": [
+        { "name": "lipstick", "tags": ["beauty products", "glamour"], "price": 15.01, "quantity": 6 },
+        { "name": "face powder", "tags": ["beauty products", "glamour"], "price": 25.29, "quantity": 5 },
+        { "name": "mascara", "tags": ["beauty products", "glamour"], "price": 26.12, "quantity": 8 },
+        { "name": "liquid makeup remover", "tags": ["beauty products", "glamour"], "price": 27.71, "quantity": 2 }
+      ],
+  },
+}
+****************************************
+
+Eliminar documentos
+****************************************
+Selección de documento
+{ _id: ObjectId('5bd761dcae323e45a93ccfe8') }
+
+****************************************
+
+
+-----------------Consultas filtros y operadores------
+contar
+sumar
+promediar
+
