@@ -6,7 +6,14 @@ Calcular agrupar por ubicación
     "$sum": "$saleTotalCalculado"
   }
 }
+----------------Conexión base de datos------------------
+mongodb://localhost:27017
+use catalogo_productos
+Validar lectura**************************
+ db.Suministros.findOne()
+
 ----------------Consultas básicas------------------
+*****************************************
 Insertar datos
 *****************************************
 {
@@ -72,13 +79,18 @@ Insertar datos
   "couponUsed": true,
   "purchaseMethod": "Online"
 }
-
-
-encontrarlo
-db.ventas_productos.findOne({"_id": ObjectId("6910974172eab9a07ca9dfae")})
 *****************************************
+Encontrarlo
+*****************************************
+Encontrar todos *************************
+db.Suministros.findOne()
+Encontrar por ID*************************
+db.Suministros.findOne({"_id": ObjectId("6910974172eab9a07ca9dfae")})
+Encontrar por localidad******************
+encontrar los documento con storeLocation en Seattle
+db.Suministros.find({ storeLocation: "Seattle" })
 
-
+*****************************************
 Selección de datos
 *****************************************
 Uso de comando (cambiar id para encontrar otro
@@ -87,31 +99,69 @@ Selección de artículos con cupon de descuento
 { "couponUsed": false }
 
 *****************************************
-
 Actualización de datos
 ****************************************
-{
-  $set: {
-"items": [
+db.Suministros.updateOne(
+  { _id: 1 },
+  {
+    $set: {
+      "items": [
         { "name": "lipstick", "tags": ["beauty products", "glamour"], "price": 15.01, "quantity": 6 },
         { "name": "face powder", "tags": ["beauty products", "glamour"], "price": 25.29, "quantity": 5 },
         { "name": "mascara", "tags": ["beauty products", "glamour"], "price": 26.12, "quantity": 8 },
         { "name": "liquid makeup remover", "tags": ["beauty products", "glamour"], "price": 27.71, "quantity": 2 }
-      ],
-  },
-}
-****************************************
+      ]
+    }
+  }
+)
 
+****************************************
 Eliminar documentos
 ****************************************
 Selección de documento
-{ _id: ObjectId('5bd761dcae323e45a93ccfe8') }
+db.Suministros.deleteOne({ _id: ObjectId('5bd761dcae323e45a93ccfe8') })
+db.Suministros.deleteMany({ storeLocation: "Seattle" })
 
 ****************************************
 
+----------Consultas filtros y operadores---------
 
------------------Consultas filtros y operadores------
-contar
-sumar
-promediar
+****************************************
+Contar
+****************************************
+Contar cuantos documentos usaron cupón**
+db.Suministros.countDocuments({ couponUsed: true })
 
+****************************************
+Sumar
+****************************************
+Sumar numero de productos "Items" hay en cada Localidad**
+db.Suministros.aggregate([
+  {
+    $project: {
+      storeLocation: 1,
+      numberOfItems: { $size: "$items" }
+    }
+  },
+  {
+    $group: {
+      _id: "$storeLocation",
+      totalItems: { $sum: "$numberOfItems" }
+    }
+  }
+])
+****************************************
+Promedio
+****************************************
+Calcular promedio de item o productos por cadena de suministro**
+db.Suministros.aggregate([
+  {
+    $project: {
+      numberOfItems: { $size: "$items" }
+    }
+  },
+  {
+
+          promedioSuministro: { $avg: "$numberOfItems" }
+  }
+])
